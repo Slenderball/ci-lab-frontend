@@ -1,0 +1,7 @@
+{
+  "name": "ci-lab-frontend",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'Building project...' && mkdir -p dist && echo 'Done' > dist/index.html"
+  }
+}

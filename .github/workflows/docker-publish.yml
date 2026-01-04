@@ -1,0 +1,40 @@
+name: Build and Publish Front-end
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - [cite_start]'main'       # [cite: 167]
+      - [cite_start]'feature/*'  # [cite: 168]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies and build
+        run: |
+          npm install -g pnpm
+          pnpm install
+          npm run build
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          [cite_start]registry: ghcr.io                              # [cite: 177]
+          [cite_start]username: ${{ github.actor }}                  # [cite: 178, 179]
+          [cite_start]password: ${{ secrets.GITHUB_TOKEN }}          # [cite: 180]
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .                                     [cite_start]# [cite: 183]
+          [cite_start]push: true                                     # [cite: 184]
+          tags: ghcr.io/${{ github.repository }}:latest
